@@ -5,32 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ejercicio input dinámico</title>
     <link href="assets/bootstrap-5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <style>
-    body {
-        font-family: 'Montserrat', sans-serif;
-    }
-    .left-panel {
-        padding: 30px;
-        background-color: #E2DFE0 ;
-    }
-    .right-panel {
-        padding: 30px;
-        background-color: #C9A6AA;
-        border-left: 2px solid #FFFFFF;
-    }
-    .color-box {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border: 1px solid #3B3B40;
-        display: inline-block;
-        vertical-align: middle;
-    }
-    .carousel-img {
-        height: 400px;
-        object-fit: cover;
-    }
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <div class="container-fluid">
@@ -39,8 +14,8 @@
             <div class="col-md-6 left-panel">
                 <h2 class="mb-4">Realiza tu pedido</h2>
                 <div class="mb-3">
-                    <label for="flavor" class="form-label">Elige tu sabor(es) de helado</label>
-                    <select class="form-select" id="flavor">
+                    <label for="sabor" class="form-label">Elige tu sabor(es) de helado</label>
+                    <select class="form-select" id="sabor">
                         <option value="">Selecciona un sabor</option>
                         <option>Vainilla</option>
                         <option>Chocolate suizo</option>
@@ -54,8 +29,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="scoops" class="form-label">¿Cuántas bolitas quieres?</label>
-                    <input type="number" min="1" max="3" class="form-control" id="scoops" placeholder="1, 2 o 3">
+                    <label for="bolitas" class="form-label">¿Cuántas bolitas quieres?</label>
+                    <input type="number" min="1" max="3" class="form-control" id="bolitas" placeholder="1, 2 o 3">
                 </div>
 
                 <div class="mb-3">
@@ -69,13 +44,16 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="colorFav" class="form-label">Indícanos tu color favorito</label>
-                    <input type="color" class="form-control form-control-color" id="colorFav" value="#000000" title="Elige tu color favorito">
-                </div>
-
-                <!-- alerta -->
-                <div class="alert alert-info" role="alert">
-                    <p>Completa los campos para ver tu helado personalizado.</p>
+                    <label class="form-label">Elige un color favorito</label>
+                    <div id="colorSelector" class="d-flex flex-wrap gap-2">
+                        <button type="button" class="color-btn" data-color="#ff69b4" style="background-color: pink;" title="Rosado"></button>
+                        <button type="button" class="color-btn" data-color="#28a745" style="background-color: green;" title="Verde"></button>
+                        <button type="button" class="color-btn" data-color="#f2c94c" style="background-color: yellow;" title="Amarillo"></button>
+                        <button type="button" class="color-btn" data-color="#007bff" style="background-color: blue;" title="Azul"></button>
+                        <button type="button" class="color-btn" data-color="#000000" style="background-color: black;" title="Negro"></button>
+                        <button type="button" class="color-btn" data-color="#dc3545" style="background-color:red;" title="Rojo"></button>
+                        <button type="button" class="color-btn" data-color="#8e44ad" style="background-color: rebeccapurple;" title="Morado"></button>
+                    </div>
                 </div>
 
                 <!-- offcanvas en btn-->
@@ -99,15 +77,19 @@
             <!-- elecciones DERECHA -->
             <div class="col-md-6 right-panel">
                 <h3 class="mb-4">Resumen de tu pedido</h3>
-                    <p><strong>Sabor:</strong> <span id="showFlavor">-</span></p>
-                    <p><strong>Bolitas:</strong> <span id="showScoops">-</span></p>
+                    <p><strong>Sabor:</strong> <span id="showSabor">-</span></p>
+                    <p><strong>Bolitas:</strong> <span id="showBolitas">-</span></p>
                     <p><strong>Toppings:</strong> <span id="showToppings">-</span></p>
                     <p><strong>Color favorito:</strong> <span id="showColor">-</span> <span class="color-box" id="colorBox"></span></p>
 
+                    
+                    <!-- alerta -->
+                    <div class="alert alert-warning" role="alert">
+                        Completa los campos para ver tu helado personalizado.
+                    </div>
+
                     <!-- popover en btn -->
-                    <button type="button" class="btn btn-outline-secondary mt-3" data-bs-toggle="popover" title="Tip de sabor" data-bs-content="¡Puedes combinar sabores si eliges 2 o 3 bolitas!">
-                        <p>¿Un tip?</p>
-                    </button>
+                    <button type="button" class="btn tip-btn mt-3" data-bs-toggle="popover" title="¿Por qué elegir un color?" data-bs-content="Tu pedido ahora es personalizado: Enviaremos el empaque y utencilios correspondientes al color que tu elijas">¿Por qué pedimos un color?</button>
 
                     <!-- carrusel -->
                     <div id="carouselExample" class="carousel slide mt-5" data-bs-ride="carousel">
@@ -129,11 +111,11 @@
                         <span class="carousel-control-next-icon"></span>
                     </button>
                 </div>
+                <a href="#" class="btn btn-warning btn-guardarpedido" tabindex="-1" role="button" aria-disabled="true">Guarda tu pedido</a>
             </div>
         </div>
     </div>
-
-    <!-- Offcanvas -->
+    <!-- offcanvas -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="infoCanvas">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title">Lista de alérgenos:</h5>
@@ -146,30 +128,6 @@
 
     <script src="assets/bootstrap-5.3.6/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            const toast = new bootstrap.Toast($('#liveToast')[0]);
-            $('[data-bs-toggle="popover"]').popover();
-
-            function updateDisplay() {
-                const flavor = $('#flavor').val() || '-';
-                const scoops = $('#scoops').val() || '-';
-                const toppings = $('.topping:checked').map(function () { return this.value; }).get().join(', ') || '-';
-                const color = $('#colorFav').val();
-
-                $('#showFlavor').text(flavor);
-                $('#showScoops').text(scoops);
-                $('#showToppings').text(toppings);
-                $('#showColor').text(color);
-                $('#colorBox').css('background-color', color);
-
-                toast.show();
-            }
-
-            $('#flavor, #scoops, .topping, #colorFav').on('change', updateDisplay);
-        });
-    </script>
-
+    <script src="assets/js/script.js"></script>
 </body>
 </html>
